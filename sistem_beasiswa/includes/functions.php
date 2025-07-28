@@ -59,20 +59,45 @@ function validateEmail($email) {
 // Fungsi untuk upload file
 function uploadFile($file) {
     $target_dir = "uploads/";
+    
+    // Buat folder uploads jika belum ada
+    if (!file_exists($target_dir)) {
+        if (!mkdir($target_dir, 0755, true)) {
+            error_log("Gagal membuat folder uploads");
+            return false;
+        }
+    }
+    
+    // Validasi file
+    if (!isset($file['tmp_name']) || !is_uploaded_file($file['tmp_name'])) {
+        error_log("File tidak valid atau tidak ter-upload");
+        return false;
+    }
+    
     $file_extension = strtolower(pathinfo($file["name"], PATHINFO_EXTENSION));
     $allowed_extensions = array("pdf", "jpg", "jpeg", "png", "zip");
     
     if (!in_array($file_extension, $allowed_extensions)) {
+        error_log("Ekstensi file tidak diizinkan: " . $file_extension);
         return false;
     }
     
-    $new_filename = time() . "_" . $file["name"];
-    $target_file = $target_dir . $new_filename;
+    // Buat nama file yang aman
+    $safe_filename = uniqid() . "_" . preg_replace("/[^a-zA-Z0-9\._-]/", "", $file["name"]);
+    $target_file = $target_dir . $safe_filename;
     
-    if (move_uploaded_file($file["tmp_name"], $target_file)) {
-        return $new_filename;
+    // Cek ukuran file (max 5MB)
+    if ($file["size"] > 5 * 1024 * 1024) {
+        error_log("File terlalu besar: " . $file["size"] . " bytes");
+        return false;
     }
     
-    return false;
+    // Upload file
+    if (move_uploaded_file($file["tmp_name"], $target_file)) {
+        return $safe_filename;
+    } else {
+        error_log("Gagal move file dari " . $file["tmp_name"] . " ke " . $target_file);
+        return false;
+    }
 }
 ?>

@@ -70,20 +70,60 @@ sistem_beasiswa/
 ├── index.php               # Halaman beranda
 ├── daftar.php              # Form pendaftaran
 ├── hasil.php               # Hasil pendaftaran
+├── setup.php               # Setup otomatis sistem
 ├── database.sql            # Script database
-└── README.md               # Dokumentasi
+├── README.md               # Dokumentasi
+└── TROUBLESHOOTING.md      # Panduan troubleshooting
 ```
 
 ## Instalasi
 
-### 1. Persiapan Database
+### 🚀 Quick Start (Recommended)
+
+1. **Copy Project ke Web Server:**
+   ```bash
+   # XAMPP
+   cp -r sistem_beasiswa C:\xampp\htdocs\beasiswa
+   
+   # WAMP  
+   cp -r sistem_beasiswa C:\wamp64\www\beasiswa
+   
+   # Linux
+   sudo cp -r sistem_beasiswa /var/www/html/beasiswa
+   ```
+
+2. **Setup Database:**
+   ```sql
+   -- Buat database
+   CREATE DATABASE sistem_beasiswa;
+   
+   -- Import data
+   mysql -u root -p sistem_beasiswa < database.sql
+   ```
+
+3. **Jalankan Setup Otomatis:**
+   ```
+   http://localhost/beasiswa/setup.php
+   ```
+
+4. **Akses Sistem:**
+   ```
+   http://localhost/beasiswa/
+   ```
+
+### 📋 Manual Setup
+
+#### 1. Persiapan Database
 ```sql
--- Import file database.sql ke MySQL
-mysql -u root -p < database.sql
+-- Buat database
+CREATE DATABASE sistem_beasiswa;
+
+-- Import file database.sql
+mysql -u root -p sistem_beasiswa < database.sql
 ```
 
-### 2. Konfigurasi Database
-Edit file `config/database.php` sesuai dengan setting database Anda:
+#### 2. Konfigurasi Database
+Edit file `config/database.php`:
 ```php
 define('DB_HOST', 'localhost');
 define('DB_USER', 'root');
@@ -91,11 +131,24 @@ define('DB_PASS', '');
 define('DB_NAME', 'sistem_beasiswa');
 ```
 
-### 3. Setup Web Server
-- Pastikan PHP dan MySQL sudah terinstall
-- Copy folder `sistem_beasiswa` ke document root (htdocs/www)
-- Buat folder `uploads` dan set permission 755
-- Akses melalui browser: `http://localhost/sistem_beasiswa`
+#### 3. Setup Folder Upload
+```bash
+# Linux/Mac
+mkdir uploads
+chmod 755 uploads
+
+# Windows - Buat folder uploads manual
+# Set permission Full Control untuk Users
+```
+
+#### 4. Web Server Setup
+- Pastikan PHP ≥ 7.4 dan MySQL ≥ 5.7
+- Copy project ke document root
+- Set permission folder yang tepat
+- Akses: `http://localhost/sistem_beasiswa`
+
+### ⚠️ Troubleshooting
+Jika ada error upload file atau masalah lain, lihat file `TROUBLESHOOTING.md` untuk solusi lengkap.
 
 ## Validasi Form
 

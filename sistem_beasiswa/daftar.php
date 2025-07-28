@@ -26,12 +26,36 @@ if ($_POST) {
     
     // Validasi file upload
     $berkas_syarat = '';
-    if (isset($_FILES['berkas_syarat']) && $_FILES['berkas_syarat']['error'] == 0) {
-        $uploaded_file = uploadFile($_FILES['berkas_syarat']);
-        if ($uploaded_file) {
-            $berkas_syarat = $uploaded_file;
-        } else {
-            $errors[] = "Gagal upload berkas syarat";
+    if (isset($_FILES['berkas_syarat'])) {
+        $file_error = $_FILES['berkas_syarat']['error'];
+        
+        switch ($file_error) {
+            case UPLOAD_ERR_OK:
+                $uploaded_file = uploadFile($_FILES['berkas_syarat']);
+                if ($uploaded_file) {
+                    $berkas_syarat = $uploaded_file;
+                } else {
+                    $errors[] = "Gagal upload berkas syarat. Periksa format dan ukuran file.";
+                }
+                break;
+            case UPLOAD_ERR_INI_SIZE:
+            case UPLOAD_ERR_FORM_SIZE:
+                $errors[] = "File terlalu besar. Maksimal 5MB.";
+                break;
+            case UPLOAD_ERR_PARTIAL:
+                $errors[] = "File hanya ter-upload sebagian. Coba lagi.";
+                break;
+            case UPLOAD_ERR_NO_FILE:
+                $errors[] = "Berkas syarat harus diupload";
+                break;
+            case UPLOAD_ERR_NO_TMP_DIR:
+                $errors[] = "Folder temporary tidak tersedia. Hubungi administrator.";
+                break;
+            case UPLOAD_ERR_CANT_WRITE:
+                $errors[] = "Gagal menulis file. Hubungi administrator.";
+                break;
+            default:
+                $errors[] = "Error upload tidak dikenal: " . $file_error;
         }
     } else {
         $errors[] = "Berkas syarat harus diupload";
