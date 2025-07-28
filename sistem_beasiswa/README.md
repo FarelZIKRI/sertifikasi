@@ -15,10 +15,10 @@ Sistem ini memungkinkan mahasiswa untuk mendaftar berbagai jenis beasiswa berdas
 
 ### 2. Pendaftaran Beasiswa
 - Form pendaftaran dengan validasi lengkap
-- IPK otomatis dari sistem (simulasi)
+- Input IPK manual dengan validasi real-time
 - Upload berkas persyaratan
-- Validasi real-time untuk semua input
-- Disable form jika IPK < 3.0
+- Validasi kesesuaian IPK dengan jenis beasiswa
+- Disable opsi beasiswa yang tidak sesuai dengan IPK
 
 ### 3. Hasil Pendaftaran
 - Tampilan semua pendaftaran dalam bentuk tabel
@@ -70,7 +70,6 @@ sistem_beasiswa/
 ├── index.php               # Halaman beranda
 ├── daftar.php              # Form pendaftaran
 ├── hasil.php               # Hasil pendaftaran
-├── get_ipk.php             # API untuk mendapatkan IPK
 ├── database.sql            # Script database
 └── README.md               # Dokumentasi
 ```
@@ -104,6 +103,8 @@ define('DB_NAME', 'sistem_beasiswa');
 - Validasi format email
 - Validasi nomor HP (hanya angka, min 10 digit)
 - Validasi semester (1-8)
+- Validasi IPK (0.00 - 4.00) dengan feedback real-time
+- Validasi kesesuaian IPK dengan jenis beasiswa
 - Validasi file upload (tipe dan ukuran)
 - Real-time feedback untuk user
 
@@ -116,9 +117,11 @@ define('DB_NAME', 'sistem_beasiswa');
 ## Logika Bisnis
 
 ### IPK dan Kelayakan
-1. IPK diambil secara otomatis (simulasi dengan nilai random)
-2. Jika IPK < 3.0: form disabled, tidak bisa mendaftar
-3. Jika IPK ≥ 3.0: form aktif, cursor fokus ke pilihan beasiswa
+1. IPK diinput manual oleh mahasiswa (range 0.00 - 4.00)
+2. Validasi real-time saat input IPK
+3. Jika IPK < 3.0: tidak bisa mendaftar beasiswa (validasi form)
+4. Jika IPK < syarat beasiswa: opsi beasiswa di-disable
+5. Sistem menampilkan status kelayakan IPK secara dinamis
 
 ### Jenis Beasiswa
 1. **Beasiswa Akademik**: IPK minimal 3.5

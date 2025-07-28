@@ -147,6 +147,23 @@ input[type="file"] {
     transition: border-color 0.3s ease;
 }
 
+/* Specific styling for IPK input */
+input[type="number"]#ipk {
+    font-weight: 600;
+    text-align: center;
+    font-size: 1.1rem;
+}
+
+input[type="number"]#ipk::-webkit-outer-spin-button,
+input[type="number"]#ipk::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"]#ipk {
+    -moz-appearance: textfield;
+}
+
 input:focus,
 select:focus {
     outline: none;

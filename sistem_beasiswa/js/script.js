@@ -10,31 +10,56 @@ function validatePhone(phone) {
     return phoneRegex.test(phone);
 }
 
-// Fungsi untuk mengaktifkan/menonaktifkan form berdasarkan IPK
-function toggleFormElements(ipk) {
+// Fungsi untuk validasi IPK dan menampilkan status
+function validateIPK(ipk) {
+    const ipkStatus = document.getElementById('ipkStatus');
     const beasiswaSelect = document.getElementById('jenis_beasiswa_id');
-    const berkasInput = document.getElementById('berkas_syarat');
-    const submitBtn = document.getElementById('submitBtn');
+    
+    if (ipk === '' || ipk === null) {
+        ipkStatus.style.display = 'none';
+        return;
+    }
+    
+    ipkStatus.style.display = 'block';
     
     if (ipk < 3.0) {
-        // IPK kurang dari 3, disable form elements
-        beasiswaSelect.disabled = true;
-        berkasInput.disabled = true;
-        submitBtn.disabled = true;
+        ipkStatus.className = 'ipk-display ipk-low';
+        ipkStatus.innerHTML = `IPK Anda: ${ipk} - Tidak memenuhi syarat minimum (IPK < 3.0)`;
+        showAlert('IPK kurang dari 3.0. Anda tidak dapat mendaftar beasiswa.', 'danger');
         
-        // Tampilkan pesan
-        showAlert('IPK Anda kurang dari 3.0. Anda tidak dapat mendaftar beasiswa.', 'danger');
+        // Disable pilihan beasiswa yang tidak sesuai
+        updateBeasiswaOptions(ipk);
     } else {
-        // IPK 3.0 atau lebih, enable form elements
-        beasiswaSelect.disabled = false;
-        berkasInput.disabled = false;
-        submitBtn.disabled = false;
-        
-        // Focus ke pilihan beasiswa
-        beasiswaSelect.focus();
-        
+        ipkStatus.className = 'ipk-display';
+        ipkStatus.innerHTML = `IPK Anda: ${ipk} - Memenuhi syarat untuk mendaftar beasiswa`;
         showAlert('IPK Anda memenuhi syarat untuk mendaftar beasiswa!', 'success');
+        
+        // Update pilihan beasiswa yang tersedia
+        updateBeasiswaOptions(ipk);
     }
+}
+
+// Fungsi untuk mengupdate pilihan beasiswa berdasarkan IPK
+function updateBeasiswaOptions(ipk) {
+    const beasiswaSelect = document.getElementById('jenis_beasiswa_id');
+    const options = beasiswaSelect.querySelectorAll('option');
+    
+    options.forEach(option => {
+        if (option.value === '') return; // Skip option pertama
+        
+        const minIPK = parseFloat(option.getAttribute('data-min-ipk'));
+        
+        if (ipk < minIPK) {
+            option.disabled = true;
+            option.style.color = '#999';
+            option.text = option.text + ' (IPK tidak mencukupi)';
+        } else {
+            option.disabled = false;
+            option.style.color = '';
+            // Remove text tambahan jika ada
+            option.text = option.text.replace(' (IPK tidak mencukupi)', '');
+        }
+    });
 }
 
 // Fungsi untuk menampilkan alert
@@ -106,6 +131,36 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
         
+        // Validasi IPK
+        const ipkInput = document.getElementById('ipk');
+        if (ipkInput) {
+            ipkInput.addEventListener('input', function() {
+                const ipkValue = parseFloat(this.value);
+                
+                if (this.value && (isNaN(ipkValue) || ipkValue < 0 || ipkValue > 4)) {
+                    this.style.borderColor = '#dc3545';
+                    showAlert('IPK harus antara 0.00 - 4.00!', 'danger');
+                    return;
+                }
+                
+                if (this.value && ipkValue >= 0 && ipkValue <= 4) {
+                    this.style.borderColor = '#28a745';
+                    validateIPK(ipkValue);
+                } else if (this.value === '') {
+                    this.style.borderColor = '#e9ecef';
+                    validateIPK('');
+                }
+            });
+            
+            ipkInput.addEventListener('blur', function() {
+                const ipkValue = parseFloat(this.value);
+                
+                if (this.value && !isNaN(ipkValue)) {
+                    validateIPK(ipkValue);
+                }
+            });
+        }
+        
         // Validasi file upload
         const fileInput = document.getElementById('berkas_syarat');
         if (fileInput) {
@@ -166,11 +221,32 @@ document.addEventListener('DOMContentLoaded', function() {
                 showAlert('Semester harus antara 1-8!', 'danger');
             }
             
+            // Validasi IPK
+            const ipk = parseFloat(document.getElementById('ipk').value);
+            if (!document.getElementById('ipk').value || isNaN(ipk) || ipk < 0 || ipk > 4) {
+                isValid = false;
+                showAlert('IPK harus diisi dengan nilai antara 0.00 - 4.00!', 'danger');
+            } else if (ipk < 3.0) {
+                isValid = false;
+                showAlert('IPK minimal 3.0 untuk mendaftar beasiswa!', 'danger');
+            }
+            
             // Validasi pilihan beasiswa
             const beasiswa = document.getElementById('jenis_beasiswa_id').value;
             if (!beasiswa) {
                 isValid = false;
                 showAlert('Pilih jenis beasiswa!', 'danger');
+            }
+            
+            // Validasi kesesuaian IPK dengan jenis beasiswa
+            const beasiswaSelect = document.getElementById('jenis_beasiswa_id');
+            const selectedOption = beasiswaSelect.options[beasiswaSelect.selectedIndex];
+            if (selectedOption && selectedOption.value && !isNaN(ipk)) {
+                const minIPK = parseFloat(selectedOption.getAttribute('data-min-ipk'));
+                if (ipk < minIPK) {
+                    isValid = false;
+                    showAlert(`IPK Anda (${ipk}) tidak memenuhi syarat untuk beasiswa ini (min. ${minIPK})!`, 'danger');
+                }
             }
             
             // Validasi file upload
@@ -193,52 +269,14 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// Fungsi untuk menampilkan IPK dan mengatur form
-function displayIPK() {
-    // Simulasi mendapatkan IPK dari server
-    fetch('get_ipk.php')
-        .then(response => response.json())
-        .then(data => {
-            const ipkDisplay = document.getElementById('ipkDisplay');
-            const ipkValue = data.ipk;
-            
-            if (ipkDisplay) {
-                ipkDisplay.innerHTML = `IPK Anda: ${ipkValue}`;
-                ipkDisplay.className = ipkValue >= 3.0 ? 'ipk-display' : 'ipk-display ipk-low';
-            }
-            
-            // Set nilai IPK ke hidden input
-            const ipkInput = document.getElementById('ipk');
-            if (ipkInput) {
-                ipkInput.value = ipkValue;
-            }
-            
-            // Toggle form elements berdasarkan IPK
-            toggleFormElements(ipkValue);
-        })
-        .catch(error => {
-            console.error('Error fetching IPK:', error);
-            // Fallback jika AJAX gagal
-            const ipkValue = 3.4; // Default IPK
-            const ipkDisplay = document.getElementById('ipkDisplay');
-            if (ipkDisplay) {
-                ipkDisplay.innerHTML = `IPK Anda: ${ipkValue}`;
-                ipkDisplay.className = 'ipk-display';
-            }
-            
-            const ipkInput = document.getElementById('ipk');
-            if (ipkInput) {
-                ipkInput.value = ipkValue;
-            }
-            
-            toggleFormElements(ipkValue);
-        });
-}
-
-// Auto load IPK when page loads
+// Auto-check IPK pada load jika sudah ada nilai
 document.addEventListener('DOMContentLoaded', function() {
-    if (document.getElementById('ipkDisplay')) {
-        displayIPK();
+    const ipkInput = document.getElementById('ipk');
+    if (ipkInput && ipkInput.value) {
+        const ipkValue = parseFloat(ipkInput.value);
+        if (!isNaN(ipkValue)) {
+            validateIPK(ipkValue);
+        }
     }
 });
 

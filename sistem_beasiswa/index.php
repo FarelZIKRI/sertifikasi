@@ -70,8 +70,9 @@ $beasiswaList = getAllBeasiswa();
         <div class="card">
             <h2>Informasi Penting</h2>
             <ul>
-                <li>IPK akan diambil secara otomatis dari sistem akademik</li>
+                <li>Masukkan IPK terakhir Anda dengan benar pada form pendaftaran</li>
                 <li>Mahasiswa dengan IPK di bawah 3.0 tidak dapat mendaftar beasiswa</li>
+                <li>Sistem akan otomatis memvalidasi kesesuaian IPK dengan jenis beasiswa</li>
                 <li>Pastikan berkas yang diupload sesuai dengan persyaratan</li>
                 <li>Status pendaftaran dapat dilihat di menu "Hasil Pendaftaran"</li>
                 <li>Proses verifikasi dilakukan oleh tim akademik kampus</li>

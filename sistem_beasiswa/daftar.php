@@ -112,11 +112,6 @@ $beasiswaList = getAllBeasiswa();
                 <?php endif; ?>
             </div>
 
-            <!-- IPK Display -->
-            <div id="ipkDisplay" class="ipk-display">
-                Memuat IPK...
-            </div>
-
             <form id="beasiswaForm" method="POST" enctype="multipart/form-data">
                 <div class="form-group">
                     <label for="nama">Nama Lengkap *</label>
@@ -150,15 +145,27 @@ $beasiswaList = getAllBeasiswa();
                     </select>
                 </div>
 
-                <!-- Hidden IPK field -->
-                <input type="hidden" id="ipk" name="ipk">
+                <div class="form-group">
+                    <label for="ipk">IPK Terakhir *</label>
+                    <input type="number" id="ipk" name="ipk" required 
+                           min="0" max="4" step="0.01" 
+                           placeholder="Contoh: 3.50"
+                           value="<?php echo htmlspecialchars($_POST['ipk'] ?? ''); ?>">
+                    <small>Masukkan IPK dengan format desimal (contoh: 3.50)</small>
+                </div>
+
+                <!-- IPK Status Display -->
+                <div id="ipkStatus" class="ipk-display" style="display: none;">
+                    Status IPK akan muncul di sini
+                </div>
 
                 <div class="form-group">
                     <label for="jenis_beasiswa_id">Pilihan Beasiswa *</label>
-                    <select id="jenis_beasiswa_id" name="jenis_beasiswa_id" required disabled>
+                    <select id="jenis_beasiswa_id" name="jenis_beasiswa_id" required>
                         <option value="">Pilih Jenis Beasiswa</option>
                         <?php foreach ($beasiswaList as $beasiswa): ?>
                             <option value="<?php echo $beasiswa['id']; ?>"
+                                data-min-ipk="<?php echo $beasiswa['syarat_ipk']; ?>"
                                 <?php echo (isset($_POST['jenis_beasiswa_id']) && $_POST['jenis_beasiswa_id'] == $beasiswa['id']) ? 'selected' : ''; ?>>
                                 <?php echo htmlspecialchars($beasiswa['nama_beasiswa']); ?> 
                                 (Min. IPK: <?php echo $beasiswa['syarat_ipk']; ?>)
@@ -170,11 +177,11 @@ $beasiswaList = getAllBeasiswa();
                 <div class="form-group">
                     <label for="berkas_syarat">Upload Berkas Syarat *</label>
                     <input type="file" id="berkas_syarat" name="berkas_syarat" 
-                           accept=".pdf,.jpg,.jpeg,.png,.zip" required disabled>
+                           accept=".pdf,.jpg,.jpeg,.png,.zip" required>
                     <small>Format yang diizinkan: PDF, JPG, PNG, ZIP (Maksimal 5MB)</small>
                 </div>
 
-                <button type="submit" id="submitBtn" class="btn btn-primary" disabled>
+                <button type="submit" id="submitBtn" class="btn btn-primary">
                     Daftar Beasiswa
                 </button>
             </form>
@@ -184,7 +191,8 @@ $beasiswaList = getAllBeasiswa();
             <h2>Informasi Penting</h2>
             <ul>
                 <li>Pastikan semua data yang diisi benar dan sesuai</li>
-                <li>IPK akan diambil otomatis dari sistem akademik</li>
+                <li>Masukkan IPK terakhir Anda dengan benar (format: 0.00 - 4.00)</li>
+                <li>Sistem akan memvalidasi kesesuaian IPK dengan jenis beasiswa yang dipilih</li>
                 <li>Berkas syarat harus dalam format PDF, JPG, PNG, atau ZIP</li>
                 <li>Ukuran file maksimal 5MB</li>
                 <li>Status pendaftaran awal adalah "Belum di verifikasi"</li>
