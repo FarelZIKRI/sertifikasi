@@ -1,21 +1,34 @@
 <?php
 require_once '../config/database.php';
 
-// Fungsi untuk mendapatkan IPK berdasarkan email (simulasi)
+// Fungsi untuk mendapatkan IPK berdasarkan email (dari database mahasiswa)
 function getIPKByEmail($email) {
-    // Simulasi IPK otomatis - dalam praktik nyata bisa dari database mahasiswa
-    $ipk_simulation = [
-        'john@email.com' => 3.40,
-        'jane@email.com' => 2.90,
-        'bob@email.com' => 3.75
-    ];
-    
-    // Jika email tidak ditemukan, gunakan IPK random untuk demo
-    if (isset($ipk_simulation[$email])) {
-        return $ipk_simulation[$email];
-    } else {
-        // Generate IPK random antara 2.0 - 4.0 untuk demo
-        return round(rand(200, 400) / 100, 2);
+    try {
+        $pdo = getConnection();
+        $sql = "SELECT ipk FROM mahasiswa WHERE email = ?";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$email]);
+        $result = $stmt->fetch();
+        
+        if ($result) {
+            return (float)$result['ipk'];
+        } else {
+            // Jika email tidak ditemukan, gunakan IPK random untuk demo
+            return round(rand(200, 400) / 100, 2);
+        }
+    } catch (Exception $e) {
+        // Fallback ke simulasi jika database error
+        $ipk_simulation = [
+            'john@email.com' => 3.40,
+            'jane@email.com' => 2.90,
+            'bob@email.com' => 3.75
+        ];
+        
+        if (isset($ipk_simulation[$email])) {
+            return $ipk_simulation[$email];
+        } else {
+            return round(rand(200, 400) / 100, 2);
+        }
     }
 }
 

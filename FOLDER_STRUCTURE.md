@@ -13,7 +13,8 @@ beasiswa-system/
 │   └── beasiswa_db.sql        # Script SQL untuk membuat database
 │
 ├── includes/                   # File fungsi dan helper
-│   └── functions.php          # Fungsi-fungsi PHP untuk aplikasi
+│   ├── functions.php          # Fungsi-fungsi PHP untuk aplikasi
+│   └── crud_functions.php     # Fungsi-fungsi CRUD lengkap
 │
 ├── assets/                     # Asset statis (CSS, JS, gambar)
 │   ├── css/
@@ -23,7 +24,10 @@ beasiswa-system/
 │
 ├── public/                     # File publik yang dapat diakses
 │   ├── index.php              # Halaman utama sistem
-│   └── admin.php              # Halaman admin untuk verifikasi
+│   ├── admin.php              # Halaman admin untuk verifikasi
+│   ├── manage_beasiswa.php    # CRUD jenis beasiswa
+│   ├── manage_pendaftaran.php # CRUD pendaftaran beasiswa
+│   └── manage_mahasiswa.php   # CRUD data mahasiswa
 │
 └── uploads/                    # Folder untuk menyimpan file upload
     └── (file berkas syarat)   # File yang diupload mahasiswa
@@ -65,11 +69,15 @@ Folder untuk menyimpan file yang diupload mahasiswa (berkas syarat beasiswa)
 ### File Wajib:
 1. `config/database.php` - Konfigurasi database
 2. `database/beasiswa_db.sql` - Script database
-3. `includes/functions.php` - Fungsi PHP
-4. `assets/css/style.css` - Stylesheet
-5. `assets/js/script.js` - JavaScript
-6. `public/index.php` - Halaman utama
-7. `public/admin.php` - Halaman admin
+3. `includes/functions.php` - Fungsi PHP utama
+4. `includes/crud_functions.php` - Fungsi CRUD lengkap
+5. `assets/css/style.css` - Stylesheet
+6. `assets/js/script.js` - JavaScript
+7. `public/index.php` - Halaman utama
+8. `public/admin.php` - Dashboard admin
+9. `public/manage_beasiswa.php` - CRUD jenis beasiswa
+10. `public/manage_pendaftaran.php` - CRUD pendaftaran
+11. `public/manage_mahasiswa.php` - CRUD data mahasiswa
 
 ### File Opsional:
 1. `README.md` - Dokumentasi
@@ -88,7 +96,10 @@ Folder untuk menyimpan file yang diupload mahasiswa (berkas syarat beasiswa)
 ## URL Akses
 
 - **Halaman Utama**: `http://localhost/beasiswa-system/public/index.php`
-- **Halaman Admin**: `http://localhost/beasiswa-system/public/admin.php`
+- **Dashboard Admin**: `http://localhost/beasiswa-system/public/admin.php`
+- **CRUD Jenis Beasiswa**: `http://localhost/beasiswa-system/public/manage_beasiswa.php`
+- **CRUD Pendaftaran**: `http://localhost/beasiswa-system/public/manage_pendaftaran.php`
+- **CRUD Data Mahasiswa**: `http://localhost/beasiswa-system/public/manage_mahasiswa.php`
 
 ## Fitur yang Diimplementasi
 
@@ -101,3 +112,9 @@ Folder untuk menyimpan file yang diupload mahasiswa (berkas syarat beasiswa)
 ✅ Status ajuan "belum di verifikasi"
 ✅ Tampilan hasil pendaftaran
 ✅ Halaman admin untuk verifikasi
+✅ **Sistem CRUD Lengkap**:
+   - CRUD Jenis Beasiswa (Create, Read, Update, Delete)
+   - CRUD Pendaftaran Beasiswa dengan statistik
+   - CRUD Data Mahasiswa untuk IPK otomatis
+   - Pencarian dan filter data
+   - Validasi dan keamanan lengkap

@@ -129,6 +129,9 @@ $hasil_pendaftaran = getAllPendaftaran();
             
             <div style="margin-top: 2rem;">
                 <a href="index.php" class="btn btn-primary">Kembali ke Halaman Utama</a>
+                <a href="manage_beasiswa.php" class="btn btn-primary">Kelola Jenis Beasiswa</a>
+                <a href="manage_pendaftaran.php" class="btn btn-primary">Kelola Pendaftaran</a>
+                <a href="manage_mahasiswa.php" class="btn btn-primary">Kelola Data Mahasiswa</a>
             </div>
         </div>
     </div>
