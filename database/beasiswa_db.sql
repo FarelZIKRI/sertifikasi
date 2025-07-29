@@ -50,4 +50,9 @@ INSERT INTO jenis_beasiswa (nama_beasiswa, deskripsi, syarat_ipk, syarat_lain) V
 INSERT INTO mahasiswa (nim, nama, email, ipk, semester) VALUES
 ('12345678', 'John Doe', 'john@email.com', 3.40, 5),
 ('87654321', 'Jane Smith', 'jane@email.com', 2.90, 4),
-('11223344', 'Bob Wilson', 'bob@email.com', 3.75, 6);
+('11223344', 'Bob Wilson', 'bob@email.com', 3.75, 6),
+('22334455', 'Alice Brown', 'alice@email.com', 2.65, 3),
+('33445566', 'Charlie Davis', 'charlie@email.com', 3.85, 7),
+('44556677', 'Diana Evans', 'diana@email.com', 2.55, 2),
+('55667788', 'Edward Green', 'edward@email.com', 3.20, 4),
+('66778899', 'Fiona Harris', 'fiona@email.com', 3.95, 8);

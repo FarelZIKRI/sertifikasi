@@ -54,10 +54,15 @@ function checkIPK(email) {
     const ipkData = {
         'john@email.com': 3.40,
         'jane@email.com': 2.90,
-        'bob@email.com': 3.75
+        'bob@email.com': 3.75,
+        'alice@email.com': 2.65,
+        'charlie@email.com': 3.85,
+        'diana@email.com': 2.55,
+        'edward@email.com': 3.20,
+        'fiona@email.com': 3.95
     };
     
-    let ipk = ipkData[email] || (Math.random() * 2 + 2).toFixed(2);
+    let ipk = ipkData[email] || (Math.random() * 1.5 + 2.5).toFixed(2);
     ipk = parseFloat(ipk);
     
     displayIPK(ipk);

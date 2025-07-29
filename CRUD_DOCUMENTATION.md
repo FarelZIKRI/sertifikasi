@@ -3,6 +3,11 @@
 ## Overview
 Sistem CRUD (Create, Read, Update, Delete) telah diimplementasikan secara lengkap untuk mengelola semua aspek sistem pendaftaran beasiswa online.
 
+## Update Terbaru
+✅ **IPK Random Generator**: Diubah dari range 2.00-4.00 menjadi **2.50-4.00** untuk lebih realistis
+✅ **Sample Data**: Ditambahkan lebih banyak data mahasiswa untuk testing
+✅ **Konsistensi**: Semua sistem (PHP, JavaScript, Database) menggunakan range yang sama
+
 ## Struktur CRUD
 
 ### 1. CRUD Jenis Beasiswa

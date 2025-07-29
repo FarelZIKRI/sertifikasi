@@ -13,21 +13,26 @@ function getIPKByEmail($email) {
         if ($result) {
             return (float)$result['ipk'];
         } else {
-            // Jika email tidak ditemukan, gunakan IPK random untuk demo
-            return round(rand(200, 400) / 100, 2);
+            // Jika email tidak ditemukan, gunakan IPK random antara 2.50 - 4.00
+            return round(rand(250, 400) / 100, 2);
         }
     } catch (Exception $e) {
         // Fallback ke simulasi jika database error
         $ipk_simulation = [
             'john@email.com' => 3.40,
             'jane@email.com' => 2.90,
-            'bob@email.com' => 3.75
+            'bob@email.com' => 3.75,
+            'alice@email.com' => 2.65,
+            'charlie@email.com' => 3.85,
+            'diana@email.com' => 2.55,
+            'edward@email.com' => 3.20,
+            'fiona@email.com' => 3.95
         ];
         
         if (isset($ipk_simulation[$email])) {
             return $ipk_simulation[$email];
         } else {
-            return round(rand(200, 400) / 100, 2);
+            return round(rand(250, 400) / 100, 2);
         }
     }
 }
