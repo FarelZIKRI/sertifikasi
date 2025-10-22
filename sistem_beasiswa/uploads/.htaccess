@@ -1,0 +1,28 @@
+# Uploads folder security
+
+# Prevent execution of PHP files
+<Files *.php>
+    Order allow,deny
+    Deny from all
+</Files>
+
+# Prevent execution of other script files
+<FilesMatch "\.(php|php3|php4|php5|phtml|pl|py|jsp|asp|sh|cgi)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Allow only specific file types
+<FilesMatch "\.(pdf|jpg|jpeg|png|zip)$">
+    Order deny,allow
+    Allow from all
+</FilesMatch>
+
+# Prevent directory browsing
+Options -Indexes
+
+# Add security headers
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options nosniff
+    Header set X-Frame-Options DENY
+</IfModule>
